@@ -1,0 +1,11 @@
+﻿Table,Donnée,Description,Type,obligatoire,calculble
+Animateur,nom_Animateur,Nom de l'animateur,VARCHAR,yes,NO
+Animateur,prenom_Animateur,Prénom de l'animateur,VARCHAR,yes,NO
+Animateur,email_Animateur,Adresse email de l'animateur,VARCHAR,yes,NO
+Thématique,nom,Nom de la thématique,VARCHAR,YES,No
+Thématique,description,Description de la thématique,TEXT,YES,NO
+Épisode,id,Identifiant unique de l'épisode,INT,no,NO
+Épisode,titre,Titre de l'épisode,VARCHAR,yes,NO
+Épisode,description,Présentation/contenu de l'épisode,TEXT,yes,NO
+Épisode,date_publication,Date de publication de l'épisode,DATE,yes,NO
+Épisode,duree,Durée de l'épisode,TIME,yes,NO

@@ -1,0 +1,46 @@
+body{
+    text-align: center;
+    color: grey;
+    font-size: larger;
+    font-family: sans-serif;
+    background-color: lightblue;
+    
+
+}
+nav{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.container{
+    margin-top: 5vh;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    border: dashed green 2px;
+    gap: 10px;
+
+}
+a{
+    text-decoration: none;
+    color: antiquewhite;
+   
+    
+
+}
+
+.card{
+    background-color: lightcyan;
+    box-shadow: 2px 2px 12px white;
+    border-radius: 5px;
+    border-color: grey;
+    text-align: center;
+
+    
+}
+.card h2{
+    color: rgb(209, 209, 200);
+    text-align: center;
+    text-shadow: 2px 2px 2px darkgrey;
+    
+}
