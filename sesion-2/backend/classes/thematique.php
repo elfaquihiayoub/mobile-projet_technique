@@ -6,7 +6,7 @@ class Thematique
     private $nom_thematique;
     private $description_thematique;
 
-    public function __construct($id_thematique, $nom_thematique, $description_thematique)
+    public function __construct( $nom_thematique, $description_thematique,$id_thematique=null)
     {
         $this->id_thematique = $id_thematique;
         $this->nom_thematique = $nom_thematique;

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="flex min-h-screen">
+        <aside class="w-64 bg-gray-600 text-white flex flex-col p-5 gap-5 shadow-2xl">
+            <h2>gestion</h2>
+            <nav>
+                <a href="">thematiques</a>
+            </nav>
+        </aside>
+        <div class="main_section">
+            <header>
+                <h2>gestion de thematiques</h2>
+                <span>admin</span>
+            </header>
+            <main>
+                <section>
+                    <div>
+                         <h2>thematiques</h2>
+                        <p>the thematiques that u want </p>
+                    </div>
+                    <button>ajouter une thematique</button>
+                </section>
+                <section>
+                    <form id="form-thematique">
+                        <h3>ajouter une thematique</h3>
+                        <input type="text" placeholder="nom thematique" name="nom_thematique" id="nom_thematique">
+                        <input type="text" placeholder="descreption thematique" name="description_thematique" id="description_thematique">
+                        <button type="submit">ajouter</button>
+                        <button type="button">annuler</button>
+                    </form>
+                </section>
+                <section>
+                    <h3>list categories</h3>
+                    <table>
+                        <thead>
+                            <th>id</th>
+                            <th>nom</th>
+                            <th>action</th>
+                            
+                        </thead>
+                        <tbody id="table-thematiques-body">
+
+                        </tbody>
+                    </table>
+                </section>
+
+            </main>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>

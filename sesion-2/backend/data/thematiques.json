@@ -1,0 +1,27 @@
+[
+    {
+        "id_thematique": 1,
+        "nom_thematique": "Technologie",
+        "description_thematique": "Podcasts sur la technologie et le num\u00e9rique"
+    },
+    {
+        "id_thematique": 2,
+        "nom_thematique": "Sport",
+        "description_thematique": "Podcasts consacr\u00e9s au sport et \u00e0 l'actualit\u00e9 sportive"
+    },
+    {
+        "id_thematique": 3,
+        "nom_thematique": "Culture",
+        "description_thematique": "Podcasts sur la culture, les arts et la soci\u00e9t\u00e9"
+    },
+    {
+        "id_thematique": 4,
+        "nom_thematique": "devlopment",
+        "description_thematique": "111111aaaaaaaaaa"
+    },
+    {
+        "id_thematique": 5,
+        "nom_thematique": "lets talk",
+        "description_thematique": "aasdads"
+    }
+]
