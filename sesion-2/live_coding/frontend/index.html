@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="flex min-h-screen">
+        <aside class="w-64 bg-gray-400 text-white flex flex-col p-3 text-center">
+            <h2 class="my-5  font-bold text-2xl  ">GESTION</h2>
+            <nav class="pt-5 flex flex-col">
+                <a href="#" class="text-lg p-3 bg-gray-300 rounded-xl ">thematiques</a>
+            </nav>
+        </aside>
+
+        <div class=" flex flex-col flex-1">
+            <header class=" flex justify-between p-4 bg-gray-100 border border-b">
+                <h2 class="px-3">gestion de thematiques</h2>
+                <span class="px-3">admin</span>
+            </header>
+            
+            <main class="flex flex-col ">
+                <section class="flex justify-between  h-36 text-center my-3 " >
+                    <div class="   w-64">
+                         <h2 class="mb-12 font-bold text-2xl ">thematiques</h2>
+                        <p class="">the thematiques that u want </p>
+                    </div>
+                    <button class="bg-blue-400 p-4 rounded h-14 bg-blue-600 text-white py-2 rounded-lg " id="ajouter_btn">ajouter une thematique</button>
+                </section>
+                <section class="w-full bg-gray-100 space-y-4 p-4 ">
+                    <h3 class="text-lg font-semibold text-gray-700  pb-3">Ajouter / Modifier</h3>
+                    <form id="form-thematique" class="space-y-4" hidden>
+                        <input type="text" placeholder="nom thematique" name="nom_thematique" id="nom_thematique" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" placeholder="descreption thematique" name="description_thematique" id="description_thematique" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <div class="flex gap-3 p-5">
+                            <button type="button" class="flex-1 bg-gray-100 text-gray-600 py-2 rounded-lg text-sm hover:bg-gray-200 transition-colors">Annuler</button>
+                            <button type="submit" class="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors">Enregistrer</button>
+                        </div>
+                      
+                    </form>
+                </section>
+
+
+                <section class="bg-white rounded shadow-sm overflow-hidden">
+                    <h3 class="text-lg font-semibold text-gray-700 p-6 border-b">list categories</h3>
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <th class="text-left text-xs text-gray-500 uppercase px-6 py-3">id</th>
+                            <th class="text-left text-xs text-gray-500 uppercase px-6 py-3">nom</th>
+                            <th class="text-left text-xs text-gray-500 uppercase px-6 py-3">action</th>
+                        </thead>
+                        <tbody id="table-thematiques-body" class="divide-y divide-gray-10">
+
+                        </tbody>
+                    </table>
+                </section>
+
+            </main>
+        </div>
+    </div>
+    <script src="../frontend/main.js"></script>
+</body>
+</html>

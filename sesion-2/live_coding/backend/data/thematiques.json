@@ -1,0 +1,12 @@
+[
+    {
+        "id_thematique": 1,
+        "nom_thematique": "Technologie",
+        "description_thematique": "Podcasts sur la technologie et le num\u00e9rique"
+    },
+    {
+        "id_thematique": 2,
+        "nom_thematique": "lets talk",
+        "description_thematique": "aasdads"
+    }
+]
