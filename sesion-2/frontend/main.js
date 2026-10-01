@@ -14,12 +14,12 @@ function showThematique(){
         thematiques.forEach(thematique => {
             tableBody.innerHTML+=`
             <tr>
-            <td>${thematique.id_thematique}</td>
-            <td>${thematique.nom_thematique}</td>
-            <tde
-                <button>Modifier</button>
-                <button>Supprimer</button>
-            </td>
+            <td class="px-6 py-4 text-gray-500">${thematique.id_thematique}</td>
+            <td >${thematique.nom_thematique}</td>
+                <td>
+                    <button class="text-blue-600 hover:underline text-xs">Modifier</button>
+                    <button class="text-red-500 hover:underline text-xs">Supprimer</button>
+                <td/>
             </tr>
             `
             

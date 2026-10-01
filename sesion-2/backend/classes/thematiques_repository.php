@@ -19,6 +19,7 @@ class ThematiqueRepository{
     );
     return $thematique;
     }
+    
     public function getAll()
 {
     $data = json_decode(file_get_contents($this->file), true);

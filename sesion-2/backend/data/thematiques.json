@@ -23,5 +23,10 @@
         "id_thematique": 5,
         "nom_thematique": "lets talk",
         "description_thematique": "aasdads"
+    },
+    {
+        "id_thematique": 6,
+        "nom_thematique": "alot of work ",
+        "description_thematique": "alolaolaolao"
     }
 ]
