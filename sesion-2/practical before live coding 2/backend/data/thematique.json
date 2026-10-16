@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "name": "Technologie",
+        "description": "Podcasts sur la technologie et le num\u00e9rique"
+    },
+    {
+        "id": 2,
+        "name": "Sport",
+        "description": "Podcasts consacr\u00e9s au sport et \u00e0 l'actualit\u00e9 sportive"
+    },
+    {
+        "id": 3,
+        "name": "Culture",
+        "description": "Podcasts sur la culture, les arts et la soci\u00e9t\u00e9"
+    }
+  
+]
