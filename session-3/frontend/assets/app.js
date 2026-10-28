@@ -32,11 +32,11 @@ function showThematique(){
 function showToast(message,type="success"){
     const container=document.getElementById("toast-container")
     const toast=document.createElement("div");
-    toast.className="text-white px-4 py-3 rounded shadow"
+    toast.className="text-white px-4 py-3 rounded shadow "
     if(type=="success"){
-        toast.className+="bg-green-500"
+        toast.className += "bg-green-500"
     }else{
-        toast.className+="bg-red-500"
+        toast.className += "bg-red-500"
     }
     toast.textContent=message;
     container.appendChild(toast);
