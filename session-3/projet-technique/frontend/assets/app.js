@@ -64,22 +64,27 @@ form.addEventListener("submit",function(e){
             body:JSON.stringify(data)
         }
     )
-    .then(response=>response.json())
-    .then(()=>{
-        showToast("added succesfully","success")
+    .then(response => {
+    return response.json().then(data => {
+        if (!response.ok) {
+            throw new Error(data.error);
+        }
+        return data;
+    });
+})
+    .then(() => {
+        showToast("Added successfully", "success");
         form.reset();
         showThematique();
-     
     })
-    .catch(error=>{
-        showToast(error.message,"error")
-       
+    .catch(error => {
+        showToast(error.message, "error");
     })
-    .finally(()=>{
-         spinner.classList.add("hidden");
+    .finally(() => {
+        spinner.classList.add("hidden");
         btnText.textContent = "Enregistrer";
         btnSubmit.disabled = false;
-    })
+    });
 })
 
 

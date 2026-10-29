@@ -11,6 +11,7 @@ class GestionThematique extends BaseService
         try {
             $jsonData = file_get_contents(self::$dataFile);
             $data = json_decode($jsonData, true);
+            
             $thematiques = [];
             foreach ($data as $item) {
                 $thematique = new Thematique($item["name"], $item["description"], $item["id"]);
@@ -26,6 +27,7 @@ class GestionThematique extends BaseService
     public function create(Thematique $thematique)
     {
         try {
+            
             $jsonData = file_get_contents(self::$dataFile);
             $data = json_decode($jsonData, true);
             $id = count($data) + 1;
@@ -38,7 +40,7 @@ class GestionThematique extends BaseService
             $jsonData = json_encode($data, JSON_PRETTY_PRINT);
             file_put_contents(self::$dataFile, $jsonData);
         } catch (Exception $e) {
-            throw new Exception("Erreur lors de la lecture du fichier JSON : ");
+            throw new Exception($e->getMessage());
         }
     }
 }
