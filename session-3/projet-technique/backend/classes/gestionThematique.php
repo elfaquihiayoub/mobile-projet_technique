@@ -11,7 +11,7 @@ class GestionThematique extends BaseService
         try {
             $jsonData = file_get_contents(self::$dataFile);
             $data = json_decode($jsonData, true);
-            
+
             $thematiques = [];
             foreach ($data as $item) {
                 $thematique = new Thematique($item["name"], $item["description"], $item["id"]);
@@ -27,16 +27,23 @@ class GestionThematique extends BaseService
     public function create(Thematique $thematique)
     {
         try {
-            
+            $name = trim($thematique->getName());
+
+            if (strlen($name) < 3) {
+                throw new Exception("Le nom doit contenir au moins 3 caractères.");
+            }
+
             $jsonData = file_get_contents(self::$dataFile);
             $data = json_decode($jsonData, true);
+
             $id = count($data) + 1;
+
             $data[] = [
                 "id" => $id,
-                "name" => $thematique->getName(),
+                "name" => $name,
                 "description" => $thematique->getDescription()
-
             ];
+
             $jsonData = json_encode($data, JSON_PRETTY_PRINT);
             file_put_contents(self::$dataFile, $jsonData);
         } catch (Exception $e) {
