@@ -36,6 +36,7 @@ class GestionThematique extends BaseService
             $jsonData = file_get_contents(self::$dataFile);
             $data = json_decode($jsonData, true);
 
+            
             $id = count($data) + 1;
 
             $data[] = [
