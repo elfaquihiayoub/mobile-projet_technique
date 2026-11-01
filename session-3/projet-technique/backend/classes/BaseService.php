@@ -1,6 +1,8 @@
 <?php
 
-require_once __DIR__ . "/ServiceExceptions.php";
+class DataStorageException extends RuntimeException
+{
+}
 
 abstract class BaseService
 {

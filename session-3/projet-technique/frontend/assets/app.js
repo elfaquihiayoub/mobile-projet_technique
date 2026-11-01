@@ -1,4 +1,4 @@
-const API_URL="http://localhost:8000/backend/api/controllers/controllerThematique.php"
+const API_URL="http://localhost:3000/backend/api/controllers/controllerThematique.php"
 const tbody=document.getElementById("table-categories-body")
 const form=document.getElementById("form-categorie")
 const nameF=document.getElementById("cat-nom")

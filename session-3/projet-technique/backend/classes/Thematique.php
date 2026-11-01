@@ -1,4 +1,9 @@
 <?php 
+
+class ValidationException extends InvalidArgumentException
+{
+}
+
 // class DATA;
     class Thematique{
         private int $id;
