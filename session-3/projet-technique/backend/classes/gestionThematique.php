@@ -1,54 +1,51 @@
 <?php
-require_once "Thematique.php";
-require_once "BaseService.php";
+require_once __DIR__ . "/Thematique.php";
+require_once __DIR__ . "/BaseService.php";
 
 class GestionThematique extends BaseService
 {
     private static $dataFile = __DIR__ . "/../data/thematique.json";
 
-    public function getAll()
+    public function getAll(): array
     {
-        try {
-            $jsonData = file_get_contents(self::$dataFile);
-            $data = json_decode($jsonData, true);
+        $data = $this->readJsonFile(self::$dataFile);
+        $thematiques = [];
 
-            $thematiques = [];
-            foreach ($data as $item) {
-                $thematique = new Thematique($item["name"], $item["description"], $item["id"]);
-                $thematiques[] = $thematique;
+        foreach ($data as $item) {
+            if (
+                !is_array($item)
+                || !isset($item["id"], $item["name"], $item["description"])
+                || !is_int($item["id"])
+                || !is_string($item["name"])
+                || !is_string($item["description"])
+            ) {
+                throw new DataStorageException("Le fichier des thématiques contient des données invalides.");
             }
-            return $thematiques;
-        } catch (Exception $e) {
-            throw new Exception("Erreur lors de la lecture du fichier JSON : ");
+
+            $thematiques[] = new Thematique($item["name"], $item["description"], $item["id"]);
         }
+
+        return $thematiques;
     }
 
 
-    public function create(Thematique $thematique)
+    public function create(Thematique $thematique): void
     {
-        try {
-            $name = trim($thematique->getName());
+        $name = trim($thematique->getName());
 
-            if (strlen($name) < 3) {
-                throw new Exception("Le nom doit contenir au moins 3 caractères.");
-            }
-
-            $jsonData = file_get_contents(self::$dataFile);
-            $data = json_decode($jsonData, true);
-
-            
-            $id = count($data) + 1;
-
-            $data[] = [
-                "id" => $id,
-                "name" => $name,
-                "description" => $thematique->getDescription()
-            ];
-
-            $jsonData = json_encode($data, JSON_PRETTY_PRINT);
-            file_put_contents(self::$dataFile, $jsonData);
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+        if (strlen($name) < 3) {
+            throw new ValidationException("Le nom doit contenir au moins 3 caractères.");
         }
+
+        $data = $this->readJsonFile(self::$dataFile);
+        $id = count($data) + 1;
+
+        $data[] = [
+            "id" => $id,
+            "name" => $name,
+            "description" => $thematique->getDescription()
+        ];
+
+        $this->writeJsonFile(self::$dataFile, $data);
     }
 }
