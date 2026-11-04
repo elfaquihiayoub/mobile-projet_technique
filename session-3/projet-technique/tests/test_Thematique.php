@@ -41,16 +41,12 @@ if (!mkdir($temporaryDirectory)) {
     throw new RuntimeException("Could not create the temporary test directory.");
 }
 
-$temporaryFiles = [
-    $temporaryDirectory . DIRECTORY_SEPARATOR . "valid.json",
-    $temporaryDirectory . DIRECTORY_SEPARATOR . "invalid.json",
-    $temporaryDirectory . DIRECTORY_SEPARATOR . "scalar.json",
-    $temporaryDirectory . DIRECTORY_SEPARATOR . "write.json",
-    $temporaryDirectory . DIRECTORY_SEPARATOR . "workflow.json",
-    $temporaryDirectory . DIRECTORY_SEPARATOR . "invalid-record.json",
-];
-$directoryPath = $temporaryDirectory . DIRECTORY_SEPARATOR . "not-a-file";
-mkdir($directoryPath);
+$validFile = $temporaryDirectory . DIRECTORY_SEPARATOR . "valid.json";
+$invalidFile = $temporaryDirectory . DIRECTORY_SEPARATOR . "invalid.json";
+$scalarFile = $temporaryDirectory . DIRECTORY_SEPARATOR . "scalar.json";
+$invalidRecordFile = $temporaryDirectory . DIRECTORY_SEPARATOR . "invalid-record.json";
+$workflowFile = $temporaryDirectory . DIRECTORY_SEPARATOR . "workflow.json";
+$encodingFile = $temporaryDirectory . DIRECTORY_SEPARATOR . "encoding.json";
 
 try {
     $thematique = new Thematique("sport", "test", 5);
@@ -60,99 +56,86 @@ try {
     assertTest($thematique->getDescription() === "test", "Thematique description was not retained.");
 
     $baseService = new class extends BaseService {
-        public function readFile(string $filePath): array
+        public function validateText(string $value, string $fieldName, int $minimumLength): string
         {
-            return $this->readJsonFile($filePath);
-        }
-
-        public function writeFile(string $filePath, array $data): void
-        {
-            $this->writeJsonFile($filePath, $data);
+            return $this->normalizeAndValidateText($value, $fieldName, $minimumLength);
         }
     };
+    assertTest(
+        $baseService->validateText("  science  ", "nom", 3) === "science",
+        "BaseService did not normalize valid text."
+    );
+    expectException(
+        ValidationException::class,
+        fn() => $baseService->validateText("ab", "nom", 3),
+        "Le nom doit contenir au moins 3 caractères."
+    );
 
-    $validFile = $temporaryFiles[0];
-    file_put_contents($validFile, '[{"id":1}]');
-    assertTest($baseService->readFile($validFile) === [["id" => 1]], "Valid JSON data was not read.");
+    file_put_contents($validFile, '[{"id":1,"name":"sport","description":"test"}]');
+    $dao = new ThematiqueDAO($validFile);
+    $found = $dao->findAll();
+    assertTest(count($found) === 1 && $found[0] instanceof Thematique, "DAO did not hydrate entities.");
+    assertTest($found[0]->getId() === 1 && $found[0]->getName() === "sport", "DAO hydrated incorrect data.");
 
     expectException(
         DataStorageException::class,
-        fn() => $baseService->readFile($temporaryDirectory . DIRECTORY_SEPARATOR . "missing.json"),
+        fn() => (new ThematiqueDAO($temporaryDirectory . DIRECTORY_SEPARATOR . "missing.json"))->findAll(),
         "Impossible de lire le fichier de données."
     );
 
-    file_put_contents($temporaryFiles[1], "{invalid");
+    file_put_contents($invalidFile, "{invalid");
     $invalidJsonException = expectException(
         DataStorageException::class,
-        fn() => $baseService->readFile($temporaryFiles[1]),
+        fn() => (new ThematiqueDAO($invalidFile))->findAll(),
         "Le fichier de données contient un JSON invalide."
     );
     assertTest($invalidJsonException->getPrevious() instanceof JsonException, "Invalid JSON cause was not preserved.");
 
-    file_put_contents($temporaryFiles[2], "null");
+    file_put_contents($scalarFile, "null");
     expectException(
         DataStorageException::class,
-        fn() => $baseService->readFile($temporaryFiles[2]),
+        fn() => (new ThematiqueDAO($scalarFile))->findAll(),
         "Le fichier de données doit contenir une liste."
     );
 
-    $baseService->writeFile($temporaryFiles[3], [["name" => "saved"]]);
-    assertTest(
-        $baseService->readFile($temporaryFiles[3]) === [["name" => "saved"]],
-        "Written JSON data could not be read back."
-    );
-
-    $encodingException = expectException(
-        DataStorageException::class,
-        fn() => $baseService->writeFile($temporaryFiles[3], ["invalid" => "\xB1\x31"]),
-        "Impossible de convertir les données en JSON."
-    );
-    assertTest($encodingException->getPrevious() instanceof JsonException, "JSON encoding cause was not preserved.");
+    file_put_contents($invalidRecordFile, '[{"id":"invalid","name":"valid","description":"record"}]');
     expectException(
         DataStorageException::class,
-        fn() => $baseService->writeFile($directoryPath, ["name" => "fail"]),
-        "Impossible d'enregistrer le fichier de données."
+        fn() => (new ThematiqueDAO($invalidRecordFile))->findAll(),
+        "Le fichier des thématiques contient des données invalides."
     );
 
-    $dataFileProperty = new ReflectionProperty(GestionThematique::class, "dataFile");
-    $originalDataFile = $dataFileProperty->getValue();
+    file_put_contents($workflowFile, "[]");
+    $service = new GestionThematique(new ThematiqueDAO($workflowFile));
+    $created = $service->create(new Thematique("  science  ", "podcasts"));
+    assertTest($created->getId() === 1, "Created thematique has an incorrect ID.");
+    assertTest($created->getName() === "science", "Created thematique name was not trimmed.");
+    assertTest($created->getDescription() === "podcasts", "Created thematique description is incorrect.");
 
-    try {
-        $dataFileProperty->setValue(null, $temporaryFiles[4]);
-        file_put_contents($temporaryFiles[4], "[]");
+    $stored = $service->getAll();
+    assertTest(count($stored) === 1, "Created thematique was not returned by getAll.");
+    assertTest($stored[0]->getId() === 1, "Stored thematique has an incorrect ID.");
 
-        $gestionThematique = new GestionThematique();
-        $gestionThematique->create(new Thematique("  science  ", "podcasts"));
-        $created = $gestionThematique->getAll();
-        assertTest(count($created) === 1, "Created thematique was not returned by getAll.");
-        assertTest($created[0]->getId() === 1, "Created thematique has an incorrect ID.");
-        assertTest($created[0]->getName() === "science", "Created thematique name was not trimmed.");
-        assertTest($created[0]->getDescription() === "podcasts", "Created thematique description is incorrect.");
+    expectException(
+        ValidationException::class,
+        fn() => $service->create(new Thematique("ab", "invalid")),
+        "Le nom doit contenir au moins 3 caractères."
+    );
+    assertTest(count($service->getAll()) === 1, "Rejected creation changed the stored data.");
 
-        expectException(
-            ValidationException::class,
-            fn() => $gestionThematique->create(new Thematique("ab", "invalid")),
-            "Le nom doit contenir au moins 3 caractères."
-        );
-        assertTest(count($gestionThematique->getAll()) === 1, "Rejected creation changed the stored data.");
-
-        $dataFileProperty->setValue(null, $temporaryFiles[5]);
-        file_put_contents($temporaryFiles[5], '[{"id":"invalid","name":"valid","description":"record"}]');
-        expectException(
-            DataStorageException::class,
-            fn() => $gestionThematique->getAll(),
-            "Le fichier des thématiques contient des données invalides."
-        );
-    } finally {
-        $dataFileProperty->setValue(null, $originalDataFile);
-    }
+    file_put_contents($encodingFile, "[]");
+    $encodingException = expectException(
+        DataStorageException::class,
+        fn() => (new ThematiqueDAO($encodingFile))->create(new Thematique("valid", "\xB1\x31"))
+    );
+    assertTest($encodingException->getPrevious() instanceof JsonException, "JSON encoding cause was not preserved.");
+    assertTest(file_get_contents($encodingFile) === "[]", "Failed write changed the stored data.");
 } finally {
-    foreach ($temporaryFiles as $temporaryFile) {
-        if (is_file($temporaryFile)) {
-            unlink($temporaryFile);
+    foreach ([$validFile, $invalidFile, $scalarFile, $invalidRecordFile, $workflowFile, $encodingFile] as $file) {
+        if (is_file($file)) {
+            unlink($file);
         }
     }
-    rmdir($directoryPath);
     rmdir($temporaryDirectory);
 }
 

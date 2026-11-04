@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class ValidationException extends InvalidArgumentException
 {

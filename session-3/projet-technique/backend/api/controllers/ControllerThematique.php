@@ -3,12 +3,17 @@ require_once __DIR__ . "/../../classes/gestionThematique.php";
 
 class ControllerTematique
 {
+    private GestionThematique $gestionThematique;
+
+    public function __construct(GestionThematique $gestionThematique)
+    {
+        $this->gestionThematique = $gestionThematique;
+    }
+
     public function listAll()
     {
         try {
-
-            $gestionThematique = new GestionThematique();
-            $thematiques = $gestionThematique->getAll();
+            $thematiques = $this->gestionThematique->getAll();
             $result = [];
             foreach ($thematiques as $thematique) {
                 $result[] = [
@@ -49,10 +54,13 @@ class ControllerTematique
             }
 
             $thematique = new Thematique($data["name"], $data["description"]);
-            $gestionThematique = new GestionThematique();
-            $gestionThematique->create($thematique);
+            $thematique = $this->gestionThematique->create($thematique);
 
-            $this->sendJson($thematique);
+            $this->sendJson([
+                "id" => $thematique->getId(),
+                "name" => $thematique->getName(),
+                "description" => $thematique->getDescription(),
+            ]);
         } catch (ValidationException $exception) {
             $this->sendJson(["error" => $exception->getMessage()], 400);
         } catch (Throwable $exception) {
@@ -68,7 +76,9 @@ class ControllerTematique
     }
 }
 
-$controller = new ControllerTematique();
+$controller = new ControllerTematique(
+    new GestionThematique(new ThematiqueDAO())
+);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $controller->createCategorie();
 } else {
