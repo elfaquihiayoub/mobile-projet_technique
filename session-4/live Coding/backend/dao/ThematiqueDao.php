@@ -2,15 +2,15 @@
 require_once __DIR__ . "/../classes/Thematique.php";
 class ThematiqueDao
 {
-    protected string $datafile;
+    private string $datafile;
     public function __construct()
     {
-        $this->dataFile = __DIR__ . "/../data/thematique.json";
+        $this->datafile = __DIR__ . "/../data/thematique.json";
     }
 
     public function readData():array
     {
-        $jsondata = file_get_contents($this->dataFile);
+        $jsondata = file_get_contents($this->datafile);
         if ($jsondata == false) {
             throw new RuntimeException("enable to read data from file");
         }
@@ -44,7 +44,7 @@ class ThematiqueDao
         if($jsonData===false){
             throw new RuntimeException("enable to encode data to formate json");
         }
-        if(file_put_contents($this->dataFile,$jsonData)===false){
+        if(file_put_contents($this->datafile,$jsonData)===false){
              throw new RuntimeException("enable to save data");
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-use ControllerThematique as GlobalControllerThematique;
+
 
 require_once __DIR__ . "/../../services/ThematiqueService.php";
 
@@ -27,14 +27,14 @@ class ControllerThematique
                 "description" => $thematique->getDescription(),
 
             ];
-            echo json_encode($result);
         }
+        echo json_encode($result);
     }
 
     public function createThematique()
     {
         $jsonData = file_get_contents("php://input");
-        $data = json_decode($jsonData);
+        $data = json_decode($jsonData, true);
         $thematique = new Thematique($data["name"], $data["description"]);
         $this->thematiqueService->create($thematique);
         echo json_encode($thematique);
@@ -42,9 +42,9 @@ class ControllerThematique
 }
 
 
-$controller = new GlobalControllerThematique();
-if ($_SERVER["REQUEST_METHOD"]=="POST"){
+$controller = new ControllerThematique();
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $controller->createThematique();
-}else{
+} else {
     $controller->listAll();
 }

@@ -11,7 +11,7 @@ class ThematiqueService{
         return $this->dao->getAll();
     }
     public function create(Thematique $thematique):void{
-        return $this->dao->create($thematique);
+         $this->dao->create($thematique);
     }
 }
 
