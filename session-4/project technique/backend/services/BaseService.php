@@ -1,6 +1,6 @@
 <?php
 
-class BaseService
+abstract class BaseService
 {
 }
 ?>
