@@ -16,7 +16,12 @@ const spinner=document.getElementById("spinner")
 
 function showThematique(){
 fetch(API_URL)
-.then(response=>response.json())
+.then(response=>response.json().then(thematiques=>{
+    if(!response.ok){
+        throw new Error(thematiques.message||"Request failed.")
+    }
+    return thematiques
+}))
 .then(thematiques=>{
     tbody.innerHTML=""
     thematiques.forEach(thematique => {
@@ -28,6 +33,9 @@ fetch(API_URL)
         </tr>`
         
     });
+})
+.catch(error=>{
+    showToast(error.message,"error")
 })
 }
 
@@ -70,7 +78,12 @@ form.addEventListener("submit",function(e){
         },
         body:JSON.stringify(data)   
     })
-    .then(response=>response.json())
+    .then(response=>response.json().then(result=>{
+        if(!response.ok){
+            throw new Error(result.message||"Request failed.")
+        }
+        return result
+    }))
     .then(()=>{
         showToast("added success","success")
         form.reset()

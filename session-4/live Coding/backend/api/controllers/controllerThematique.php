@@ -34,7 +34,7 @@ class ControllerThematique
     public function createThematique()
     {
         $jsonData = file_get_contents("php://input");
-        $data = json_decode($jsonData, true);
+        $data = json_decode($jsonData, true, 512, JSON_THROW_ON_ERROR);
         $thematique = new Thematique($data["name"], $data["description"]);
         $this->thematiqueService->create($thematique);
         echo json_encode($thematique);
@@ -42,9 +42,17 @@ class ControllerThematique
 }
 
 
-$controller = new ControllerThematique();
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $controller->createThematique();
-} else {
-    $controller->listAll();
+try {
+    $controller = new ControllerThematique();
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $controller->createThematique();
+    } else {
+        $controller->listAll();
+    }
+} catch (JsonException $exception) {
+    http_response_code(400);
+    echo json_encode(["message" => "Invalid JSON data."]);
+} catch (Exception $exception) {
+    http_response_code(500);
+    echo json_encode(["message" => $exception->getMessage()]);
 }
