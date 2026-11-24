@@ -68,7 +68,8 @@ form.addEventListener("submit", function(e) {
     })
     .then(response => {
         if (!response.ok) {
-            return response.json().then(error => {
+            return response.json()
+            .then(error => {
                 throw new Error(error.message);
             });
         }

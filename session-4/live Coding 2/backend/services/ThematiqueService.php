@@ -17,6 +17,7 @@ class ThematiqueService extends BaseService
     public function create(Thematique $thematique)
     {
         $this->checklenght($thematique->getName());
+        $this->checkDescription($thematique->getDescription());
         return $this->dao->create($thematique);
     }
 
