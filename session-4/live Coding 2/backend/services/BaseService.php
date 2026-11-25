@@ -7,7 +7,7 @@ abstract class BaseService
         if (strlen(trim($name)) < 3) {
             throw new RuntimeException("the name must be upper than 3 ");
         }
-        if(strlen(trim($name)) > 10){
+        if(strlen(trim($name)) > 20){
             throw new RuntimeException("the name must be lower than 10 ");
         }
     }
