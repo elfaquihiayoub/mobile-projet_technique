@@ -1,24 +1,24 @@
 <?php
 
 require_once __DIR__ . "/../services/BaseService.php";
-require_once __DIR__ . "/../dao/ThematiqueDao.php";
+require_once __DIR__ . "/../models/Thematique.php";
 class ThematiqueService extends BaseService
 {
-    private ThematiqueDao $dao;
-    public function __construct(ThematiqueDao $thematiqueDao)
+    private Thematique $thematique;
+    public function __construct(Thematique $thematique)
     {
-        $this->dao = $thematiqueDao;
+        $this->thematique = $thematique;
     }
     public function getAll()
     {
-        return $this->dao->getAll();
+        return $this->thematique->getAll();
     }
 
     public function create(Thematique $thematique)
     {
         $this->checklenght($thematique->getName());
         $this->checkDescription($thematique->getDescription());
-        return $this->dao->create($thematique);
+        return $this->thematique->create($thematique);
     }
 
 

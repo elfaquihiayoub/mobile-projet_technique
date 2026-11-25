@@ -13,7 +13,7 @@ class ControllerThematique
 
     public function __construct()
     {
-        $this->thematiqueService = new ThematiqueService(new ThematiqueDao());
+        $this->thematiqueService = new ThematiqueService(new Thematique("", ""));
     }
 
     public function listAll(): void

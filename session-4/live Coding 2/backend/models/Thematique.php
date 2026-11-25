@@ -1,5 +1,7 @@
 <?php
-class Thematique{
+require_once __DIR__ . "/ThematiqueDao.php";
+
+class Thematique extends ThematiqueDao{
     private int $id;
     private string $name;
     private string $description;
